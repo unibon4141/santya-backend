@@ -13,7 +13,7 @@ class ShopSearchController @Inject() (
     val controllerComponents: ControllerComponents
 )(implicit ec: ExecutionContext)
     extends BaseController {
-
+//練習用１
   def index(): Action[AnyContent] = Action {
     implicit request: Request[AnyContent] =>
       Ok("ok")
