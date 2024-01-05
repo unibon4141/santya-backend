@@ -8,6 +8,7 @@ import scala.concurrent.Future
 trait ShopSearchUsecaseInputPort {
   def handle(input: ShopSearchInputData): Future[Seq[Shop]]
 }
+//練習用3
 
 @Singleton
 object ShopSearchUsecaseInputPort {}
