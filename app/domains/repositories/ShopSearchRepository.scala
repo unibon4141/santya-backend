@@ -6,3 +6,4 @@ import scala.concurrent.Future
 trait ShopSearchRepository {
   def fetch(): Future[Seq[Shop]]
 }
+//練習用2
