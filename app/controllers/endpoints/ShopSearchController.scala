@@ -20,6 +20,8 @@ class ShopSearchController @Inject() (
     with Circe {
   def index(): Action[AnyContent] = Action {
     implicit request: Request[AnyContent] =>
+      val k = 10
+      println("aa")
       Ok("ok")
   }
 
