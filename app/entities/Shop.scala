@@ -8,8 +8,8 @@ final case class Shop(
     mapId: MapId,
     genreId: GenreId,
     sceneIds: Seq[SceneId],
-    lunchPriceRangeId: Option[PriceRangeId],
-    dinnerPriceRangeId: Option[PriceRangeId],
+    lunchPriceRangeId: PriceRangeId,
+    dinnerPriceRangeId: PriceRangeId,
     shopAddress: Address,
     distance: Double,
     lastUpdateAt: LocalDateTime

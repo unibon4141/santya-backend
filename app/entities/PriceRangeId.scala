@@ -1,3 +1,3 @@
 package entities
 
-final case class PriceRangeId(value: Int)
+final case class PriceRangeId(value: Option[Int])

@@ -1,7 +1,7 @@
 package domains.usecases
 
 import domains.repositories.ShopSearchRepository
-import entities.Shop
+import entities.{Shop, ShopId}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

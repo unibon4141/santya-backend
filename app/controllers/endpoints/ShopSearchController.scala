@@ -9,6 +9,7 @@ import entities.ShopId
 import io.circe.syntax._
 import io.circe.generic.auto._
 import play.api.libs.circe.Circe
+
 //店舗一覧の表示用コントローラー
 @Singleton
 class ShopSearchController @Inject() (
@@ -35,7 +36,6 @@ class ShopSearchController @Inject() (
   def example = Action(circe.json[Foo]) { implicit request =>
     val isEqual = request.body
     case class TestA(msg: String)
-
     Ok(TestA("example ok").asJson)
   }
 }
