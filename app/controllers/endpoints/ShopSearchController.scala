@@ -11,6 +11,7 @@ import io.circe.generic.auto._
 import play.api.libs.circe.Circe
 
 //店舗一覧の表示用コントローラー
+//TODO ワード検索、シーン検索ができるように改修する
 @Singleton
 class ShopSearchController @Inject() (
     ShopSearchUsecase: ShopSearchUsecaseInputPort,
@@ -20,6 +21,8 @@ class ShopSearchController @Inject() (
     with Circe {
   def index(): Action[AnyContent] = Action {
     implicit request: Request[AnyContent] =>
+      val k = 10
+      println("aa")
       Ok("ok")
   }
 
