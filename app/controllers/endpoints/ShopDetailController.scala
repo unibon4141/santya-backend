@@ -23,6 +23,7 @@ class ShopDetailController @Inject() (
       val input = ShopDetailInputData(ShopId(id))
       for {
         output <- ShopDeailhUsecase.handle(input)
-      } yield Ok(ShopDetailResponse.make(output).asJson)
+      } yield
+         Ok(ShopDetailResponse.make(output).asJson)
   }
 }

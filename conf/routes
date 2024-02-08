@@ -8,7 +8,36 @@ GET     /                           controllers.endpoints.ShopSearchController.i
 GET     /test/:id/                       controllers.endpoints.ShopSearchController.slickTest(id: Int)
 POST   /example                            controllers.endpoints.ShopSearchController.example()
 
-#shop
-GET     /shop/:id/                  controllers.endpoints.ShopDetailController.index(id:Int)
+# shop
+GET     /shops/:id/                  controllers.endpoints.ShopDetailController.index(id:Int)
+
+
+
+# 今後実装するもの 
+# TODO : [:id]だと店舗とユーザーidで判別できないので、わかるようにする
+# 店舗系
+# GET     /shops/                   全店舗の情報を取得
+# POST    /shops/                   新しい店舗の追加
+# 
+# PUT         /shops/:id/                店舗[id]の詳細を更新 
+# 
+# GET             /shops/search/         店舗の検索結果を取得 
+# GET       /shops/:id/comments/         店舗[id]の全コメントを取得 
+# POST        /shops/:id/comments/        店舗[id]にコメントを新規投稿 
+# 
+# ユーザー系 
+# GET          /users/        ユーザーを新規登録 
+# ログイン 
+# ログアウ
+# GET         /users/:id/favorite/:id/        ユーザー[:id]のすべてのお気に入り店舗を取得 
+# PUT         /users/:id/favorite/:id/        ユーザー[id]の店舗[id]のお気に入り登録を切り替え 
+# 
+# ジャンル系
+# GET         /genres/             全ジャンルを取得 
+# 
+# シーン系
+# GET        /scenes/            全シーンを取得 
+# 
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
