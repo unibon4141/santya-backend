@@ -9,7 +9,7 @@ class SourceCodeGeneratorEx(model:Model) extends SourceCodeGenerator(model)
   override def Table = new Table(_){
     //auto_incrementを識別できるようにする
     //生成されるモデルはOption型になる
-    override def autoIncLastAsOption=true
+    override def autoIncLastAsOption=false
     override def Column=new Column(_)
     {
       override def rawType=model.tpe match

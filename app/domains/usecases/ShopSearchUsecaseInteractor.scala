@@ -8,11 +8,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ShopSearchUsecaseInteractor @Inject() (
-    shopSearchRepository: ShopSearchRepository
+    shopSearchRepository: ShopSearchRepository,
 )(implicit
     ex: ExecutionContext
 ) extends ShopSearchUsecaseInputPort {
-  def handle(input: ShopSearchInputData): Future[Seq[Shop]] = {
-    shopSearchRepository.fetch()
+  def handle(): Future[Seq[Shop]] = {
+    for{
+      shops <- shopSearchRepository.fetch()
+    } yield shops
+
   }
 }

@@ -1,5 +1,6 @@
 package controllers.endpoints
 
+import controllers.responses.{ ShopResponse}
 import play.api.mvc._
 
 import javax.inject._
@@ -19,26 +20,14 @@ class ShopSearchController @Inject() (
 )(implicit ec: ExecutionContext)
     extends BaseController
     with Circe {
-  def index(): Action[AnyContent] = Action {
-    implicit request: Request[AnyContent] =>
-      val k = 10
-      println("aa")
-      Ok("ok")
-  }
 
-  def slickTest(id: Int): Action[AnyContent] = Action.async {
-    implicit request: Request[AnyContent] =>
-      val input = ShopSearchInputData(ShopId(id))
-      for {
-        output <- ShopSearchUsecase.handle(input)
-      } yield Ok(output.toString())
-  }
+//  全店舗を取得する
+def index(): Action[AnyContent] = Action.async {
+  implicit request: Request[AnyContent] =>
+    for {
+      output <- ShopSearchUsecase.handle()
+    } yield
+      Ok(ShopResponse.make(output).asJson)
+}
 
-  case class Foo(foo: String)
-
-  def example = Action(circe.json[Foo]) { implicit request =>
-    val isEqual = request.body
-    case class TestA(msg: String)
-    Ok(TestA("example ok").asJson)
-  }
 }
