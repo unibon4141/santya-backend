@@ -15,19 +15,19 @@ import play.api.libs.circe.Circe
 //TODO ワード検索、シーン検索ができるように改修する
 @Singleton
 class ShopSearchController @Inject() (
-    ShopSearchUsecase: ShopSearchUsecaseInputPort,
-    val controllerComponents: ControllerComponents
-)(implicit ec: ExecutionContext)
-    extends BaseController
+                                       ShopSearchUsecase: ShopSearchUsecaseInputPort,
+                                       val controllerComponents: ControllerComponents
+                                     )(implicit ec: ExecutionContext)
+  extends BaseController
     with Circe {
 
-//  全店舗を取得する
-def index(): Action[AnyContent] = Action.async {
-  implicit request: Request[AnyContent] =>
-    for {
-      output <- ShopSearchUsecase.handle()
-    } yield
-      Ok(ShopResponse.make(output).asJson)
-}
+  //  全店舗を取得する
+  def index(): Action[AnyContent] = Action.async {
+    implicit request: Request[AnyContent] =>
+      for {
+        output <- ShopSearchUsecase.handle()
+      } yield
+        Ok(ShopResponse.make(output).asJson)
+  }
 
 }

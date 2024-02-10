@@ -17,7 +17,7 @@ object Scene {
     After14
   )
 
-  def of(id: Int): Option[Scene] = values.find(_.id == id)
+  def of(id: Int): Option[Scene] = values.find(_.id.value == id)
 }
 
 

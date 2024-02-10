@@ -37,7 +37,10 @@ class MySQLShopSearchRepository @Inject() (
         genre = Genre(
           GenreId(genre.genreId), genre.genreName
         ),
-        scenes = Seq(shop.sceneId1, shop.sceneId2).flatten.flatMap(Scene.of(_)),
+        scenes = Seq(shop.sceneId1, shop.sceneId2).flatMap( v => v match {
+          case Some(a) => Scene.of(a)
+          case None    => None
+        }),
         lunchPriceRange = shop.lunchPriceRangeId match {
           case Some(value) => Some(PriceRange.of(value))
           case None        => None
