@@ -12,9 +12,10 @@ class ShopSearchUsecaseInteractor @Inject() (
 )(implicit
     ex: ExecutionContext
 ) extends ShopSearchUsecaseInputPort {
-  def handle(): Future[Seq[Shop]] = {
+  def handle(input: ShopSearchInputData): Future[Seq[Shop]] = {
     for{
-      shops <- shopSearchRepository.fetch()
+      //ユースケースに定義しているinputケースクラスを使っていいのか、あとで老人確認する
+      shops <- shopSearchRepository.fetchByWord(input)
     } yield shops
 
   }

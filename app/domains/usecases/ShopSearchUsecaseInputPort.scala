@@ -6,11 +6,13 @@ import entities.{Shop, ShopId}
 import scala.concurrent.Future
 
 trait ShopSearchUsecaseInputPort {
-  def handle(): Future[Seq[Shop]]
+  def handle(input: ShopSearchInputData): Future[Seq[Shop]]
+
 }
 
 @Singleton
 object ShopSearchUsecaseInputPort {}
 case class ShopSearchInputData(
-    id: ShopId
+    word: Option[String],
+    sceneId: Option[Int]
 )

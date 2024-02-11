@@ -31,10 +31,6 @@ object ShopResponse {
         shop_id = shop.id.value,
         shop_name = shop.name,
         map_id = shop.mapId.map(_.value),
-        //          shop.mapId match {
-        //          case Some(id) => Some(id.value)
-        //          case None => None
-        //        },
         genre_id = shop.genre.id.value,
         genre_name = shop.genre.name,
         scene_ids = shop.scenes.map(_.id.value),

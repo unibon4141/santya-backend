@@ -17,7 +17,7 @@
 ## TODO : [:id]だと店舗とユーザーidで判別できないので、わかるようにする
 ## 店舗系
 #GET     /shops/:shopId/                  controllers.endpoints.ShopDetailController.index(shopId: Int)
-GET     /shops/                            controllers.endpoints.ShopSearchController.index
+GET     /shops/                            controllers.endpoints.ShopSearchController.index(word: Option[String], sceneId: Option[Int])
 ## POST    /shops/                   新しい店舗の追加
 ##
 ## PUT         /shops/:id/                店舗[id]の詳細を更新

@@ -1,17 +1,16 @@
 package controllers.endpoints
 
-import controllers.responses.{ ShopResponse}
+import controllers.responses.ShopResponse
 import play.api.mvc._
 
 import javax.inject._
 import scala.concurrent.ExecutionContext
 import domains.usecases.{ShopSearchInputData, ShopSearchUsecaseInputPort}
-import entities.ShopId
 import io.circe.syntax._
 import io.circe.generic.auto._
 import play.api.libs.circe.Circe
 
-//店舗一覧の表示用コントローラー
+//店舗一覧の表示用コントローラーroutes
 //TODO ワード検索、シーン検索ができるように改修する
 @Singleton
 class ShopSearchController @Inject() (
@@ -22,10 +21,11 @@ class ShopSearchController @Inject() (
     with Circe {
 
   //  全店舗を取得する
-  def index(): Action[AnyContent] = Action.async {
+  def index(word: Option[String], sceneId: Option[Int]): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
+      val input = ShopSearchInputData(word, sceneId)
       for {
-        output <- ShopSearchUsecase.handle()
+        output <- ShopSearchUsecase.handle(input)
       } yield
         Ok(ShopResponse.make(output).asJson)
   }
