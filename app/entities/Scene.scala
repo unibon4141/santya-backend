@@ -18,6 +18,8 @@ object Scene {
   )
 
   def of(id: Int): Option[Scene] = values.find(_.id.value == id)
+
+  def makeSceneList: Seq[Scene] =  values
 }
 
 
