@@ -22,7 +22,7 @@ GET     /shops/                          controllers.endpoints.ShopSearchControl
 ##
 ## PUT         /shops/:id/                店舗[id]の詳細を更新
 ##
-## GET             /shops/search/         店舗の検索結果を取得
+## GET             /shops/search/        shopsで実装しているのでいらないかも　 店舗の検索結果を取得
 ## GET       /shops/:id/comments/         店舗[id]の全コメントを取得
 ## POST        /shops/:id/comments/        店舗[id]にコメントを新規投稿
 ##
@@ -32,9 +32,6 @@ GET     /shops/                          controllers.endpoints.ShopSearchControl
 ## ログアウ
 ## GET         /users/:id/favorite/:id/        ユーザー[:id]のすべてのお気に入り店舗を取得
 ## PUT         /users/:id/favorite/:id/        ユーザー[id]の店舗[id]のお気に入り登録を切り替え
-##
-## ジャンル系
-## GET         /genres/             全ジャンルを取得
 ##
 ## シーン系
 GET        /scenes/            controllers.endpoints.SceneController.index()
