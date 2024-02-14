@@ -15,7 +15,7 @@ class ShopSearchUsecaseInteractor @Inject() (
   def handle(input: ShopSearchInputData): Future[Seq[Shop]] = {
     for{
       //ユースケースに定義しているinputケースクラスを使っていいのか、あとで老人確認する
-      shops <- shopSearchRepository.fetchByWord(input)
+      shops <- shopSearchRepository.fetch(input)
     } yield shops
 
   }
