@@ -1,7 +1,7 @@
 package modules
 
 import com.google.inject.AbstractModule
-import domains.repositories.{ShopDetailRepository, ShopSearchRepository}
+import domains.repositories.{ShopCommentRepository, ShopDetailRepository, ShopSearchRepository}
 import play.api.{Configuration, Environment}
 import domains.usecases._
 import infrastructures.db.{MySQLShopCommentRepository, MySQLShopDetailRepository, MySQLShopSearchRepository}
@@ -15,10 +15,11 @@ class Module(
 //    ユースケース
     bind(classOf[ShopSearchUsecaseInputPort]).to(classOf[ShopSearchUsecaseInteractor])
     bind(classOf[ShopDetailUsecaseInputPort]).to(classOf[ShopDetailUsecaseInteractor])
-    bind(classOf[ShopCommentUsecaseInputPort]).to(classOf[MySQLShopCommentRepository])
+    bind(classOf[ShopCommentUsecaseInputPort]).to(classOf[ShopCommentUsecaseInteracter])
 
 //    リポジトリ
     bind(classOf[ShopSearchRepository]).to(classOf[MySQLShopSearchRepository])
     bind(classOf[ShopDetailRepository]).to(classOf[MySQLShopDetailRepository])
+    bind(classOf[ShopCommentRepository]).to(classOf[MySQLShopCommentRepository])
   }
 }

@@ -7,14 +7,14 @@ import slick.jdbc.MySQLProfile.api._
 import slick.jdbc.JdbcProfile
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import domains.repositories.ShopCommentRepository
 class MySQLShopCommentRepository @Inject() (
                                              protected val dbConfigProvider: DatabaseConfigProvider
                                            )(implicit ec: ExecutionContext)
   extends ShopCommentRepository
     with HasDatabaseConfigProvider[JdbcProfile] {
-  def fetch(shopId: ShopId) = {
+  def fetch(shopId: ShopId):Future[Seq[ShopComment]] = {
     val action = (for {
       comments <- T.Comment.filter(c => c.shopId === shopId.value)
     } yield comments).result

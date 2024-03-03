@@ -1,6 +1,6 @@
 package controllers.endpoints
 
-import controllers.responses.ShopDetailResponse
+import controllers.responses.{ShopCommentResponse, ShopDetailResponse}
 
 import javax.inject._
 import scala.concurrent.ExecutionContext
@@ -21,10 +21,11 @@ class ShopCommentController @Inject() (
     with Circe {
   def index(shopId: Int): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
-      val input = ShopCommentInputData(ShopId(shopId))
+//      val input = ShopCommentInputData(ShopId(shopId))
+      val input = ShopId(shopId)
       for {
         output <- ShopCommentUsecase.handle(input)
       } yield
-        Ok(ShopDetailResponse.make(output).asJson)
+        Ok(ShopCommentResponse.make(output).asJson)
   }
 }
