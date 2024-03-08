@@ -18,18 +18,18 @@
 ## 店舗系
 GET     /shops/:shopId/                  controllers.endpoints.ShopDetailController.index(shopId: Int)
 GET     /shops/                          controllers.endpoints.ShopSearchController.index(word: Option[String], sceneId: Option[Int])
-## POST    /shops/                   新しい店舗の追加
++nocsrf
+POST    /shops/                         controllers.endpoints.ShopManagementController.index()
 ##
 ## PUT         /shops/:id/                店舗[id]の詳細を更新
 ##
-## GET             /shops/search/        shopsで実装しているのでいらないかも　 店舗の検索結果を取得
-## GET       /shops/:id/comments/         店舗[id]の全コメントを取得
-## POST        /shops/:id/comments/        店舗[id]にコメントを新規投稿
+GET       /shops/:shopId/comments/        controllers.endpoints.ShopCommentController.index(shopId: Int)
+# POST        /shops/:id/comments/        店舗[id]にコメントを新規投稿
 ##
 ## ユーザー系
 ## GET          /users/        ユーザーを新規登録
-## ログイン
-## ログアウ
+## ログイン機能
+## ログアウㇳ機能
 ## GET         /users/:id/favorite/:id/        ユーザー[:id]のすべてのお気に入り店舗を取得
 ## PUT         /users/:id/favorite/:id/        ユーザー[id]の店舗[id]のお気に入り登録を切り替え
 ##

@@ -21,7 +21,7 @@ object ShopCommentResponse {
         sentence = comment.sentence
       )
     }
-
+    comments.map{makeOne}
 
   }
 }
