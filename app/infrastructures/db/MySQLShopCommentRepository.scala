@@ -9,6 +9,7 @@ import slick.jdbc.JdbcProfile
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import domains.repositories.ShopCommentRepository
+import domains.usecases.ShopPostCommentInputData
 class MySQLShopCommentRepository @Inject() (
                                              protected val dbConfigProvider: DatabaseConfigProvider
                                            )(implicit ec: ExecutionContext)
@@ -33,5 +34,16 @@ class MySQLShopCommentRepository @Inject() (
     }
   }
 
-
+  def postComment(input: ShopPostCommentInputData): Future[Boolean] = {
+    val action = T.Comment.map(c => (c.shopId, c.userId, c.title, c.sentence)) += (input.shopId.value, input.userId.value, input.title, input.sentence)
+    db.run(action).map{ result =>
+      if(result > 0) {
+//        投稿に成功した場合
+        true
+      } else {
+//        失敗した場合
+        false
+      }
+    }
+  }
 }

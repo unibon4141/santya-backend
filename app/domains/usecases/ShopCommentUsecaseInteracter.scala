@@ -1,5 +1,6 @@
 package domains.usecases
 
+import controllers.requests.ShopCommentRequest
 import domains.repositories.ShopCommentRepository
 import entities.{Shop, ShopComment, ShopId}
 import views.html.helper.input
@@ -17,5 +18,9 @@ class ShopCommentUsecaseInteracter @Inject() (
                                             ) extends ShopCommentUsecaseInputPort {
   def handle(input: ShopId):Future[Seq[ShopComment]] = {
     shopCommentRepository.fetch(input)
+  }
+
+  def post(input: ShopPostCommentInputData): Future[Boolean] = {
+    shopCommentRepository.postComment(input)
   }
 }

@@ -4,7 +4,7 @@ import controllers.requests.ShopManagementRequest
 
 import javax.inject._
 import scala.concurrent.ExecutionContext
-import domains.usecases.{ShopDetailInputData, ShopDetailUsecaseInputPort, ShopManagementInputData, ShopManagementUsecaseInputPort}
+import domains.usecases.{ShopManagementInputData, ShopManagementUsecaseInputPort}
 import entities.{GenreId, PriceRangeId, SceneId, ShopId}
 import io.circe.syntax._
 import io.circe.generic.auto._
