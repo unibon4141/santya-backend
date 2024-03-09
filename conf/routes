@@ -1,31 +1,16 @@
 ## Routes
-## This file defines all application routes (Higher priority routes first)
-## https://www.playframework.com/documentation/latest/ScalaRouting
-## ~~~~
-#
-## An example controller showing a sample home page
-##GET     /                           controllers.endpoints.ShopSearchController.index()
-#GET     /test/:id/                       controllers.endpoints.ShopSearchController.slickTest(id: Int)
-#POST   /example                            controllers.endpoints.ShopSearchController.example()
-#
-## shop
-#
-#
-#
-#
-## 今後実装するもの
-## TODO : [:id]だと店舗とユーザーidで判別できないので、わかるようにする
 ## 店舗系
 GET       /shops/:shopId/                 controllers.endpoints.ShopDetailController.index(shopId: Int)
 GET       /shops/                         controllers.endpoints.ShopSearchController.index(word: Option[String], sceneId: Option[Int])
 +nocsrf
 POST      /shops/                         controllers.endpoints.ShopManagementController.index()
 ##
-## PUT         /shops/:id/                店舗[id]の詳細を更新
++nocsrf
+PUT       /shops/:shopId/                 controllers.endpoints.ShopManagementController.edit(shopId :Int)
 ##
 GET       /shops/:shopId/comments/        controllers.endpoints.ShopCommentController.index(shopId: Int)
 #本当はshopIdをここで受け取る必要はないが、URIとしてはshop_idを入れたいのでこの形にしている。アクションの引数から外せるのがベスト
-POST      /shops/:shopId/comments/            controllers.endpoints.ShopCommentController.post(shopId: Int)
+POST      /shops/:shopId/comments/        controllers.endpoints.ShopCommentController.post(shopId: Int)
 ##
 ## ユーザー系
 ## GET          /users/        ユーザーを新規登録
@@ -36,6 +21,8 @@ POST      /shops/:shopId/comments/            controllers.endpoints.ShopCommentC
 ##
 ## シーン系
 GET        /scenes/            controllers.endpoints.SceneController.index()
+#ジャンル系
+#GET       /genres/
 ##
 #
 ## Map static resources from the /public folder to the /assets URL path

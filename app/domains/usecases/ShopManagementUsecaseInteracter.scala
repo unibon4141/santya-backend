@@ -24,6 +24,22 @@ class ShopManagementUsecaseInteracter @Inject() (
         false
       }
     }
+  }
 
+  def edit(input: ShopManagementEditInputData):Future[Boolean] = {
+    for{
+      isShopNameChanged <- shopManagementRepository.isChangedShopNameById(input.shopId, input.shopName)
+      existShop <- shopManagementRepository.existShopByShopName(input.shopName)
+    } yield {
+      //店舗名が更新されていないか、更新されていても重複する店舗がなかった場合
+      if(!isShopNameChanged || !existShop) {
+//        TODO: ユースケース、リポジトリのメソッドの名前を基本同じにしているが、それぞれもっと適切な名前の付け方があるのでは？
+        shopManagementRepository.editShop(input)
+        true
+      }  else {
+        // 店舗追加できたかのステータスを返したい
+        false
+      }
+    }
   }
 }
