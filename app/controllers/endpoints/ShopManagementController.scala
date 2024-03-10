@@ -55,11 +55,15 @@ class ShopManagementController @Inject()(
         shop_address = request.body.shop_address,
         distance = request.body.distance
       )
+      println("ok")
       ShopManagementUsecase.edit(input).map{ result =>
         //店舗の編集に成功した場合
         if(result) {
+          println("成功")
           Status(200)
         } else {
+          println("失敗")
+
           //店舗名の重複があった場合は、エラーを返す
           Status(409)
         }
