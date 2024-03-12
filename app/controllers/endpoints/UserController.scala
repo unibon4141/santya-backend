@@ -1,8 +1,7 @@
 package controllers.endpoints
 
-import controllers.requests.{UserAuthRequest, UserLoginRequest}
+import controllers.requests.UserLoginRequest
 import controllers.responses.UserLoginResponse
-
 import javax.inject._
 import scala.concurrent.ExecutionContext
 import domains.usecases.{UserLoginData, UserUsecaseInputPort}
@@ -10,13 +9,12 @@ import io.circe.syntax._
 import io.circe.generic.auto._
 import play.api.libs.circe.Circe
 import play.api.mvc.{Action, _}
-
 import java.time.Clock
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim, JwtHeader, JwtOptions}
 import play.api.Configuration
 
 //店舗の追加丶編集ができるコントローラー
-@Singleton
+//@Singleton
 class UserController @Inject()(
                                           userUsecase: UserUsecaseInputPort,
                                           val controllerComponents: ControllerComponents,
@@ -62,4 +60,22 @@ class UserController @Inject()(
       Ok(result)
 
   }
+
+//  def auth() :Action[AnyContent] = Action{
+//    implicit  request: Request[AnyContent] =>
+//      implicit val clock: Clock = Clock.systemUTC
+//      val token = request.headers.get("Authorization")
+//      println(token)
+//      println("aa")
+//      val result: String = token match {
+//        case Some(t) =>
+//          //Authenticationヘッダからtokenを読み込むj
+//          val token = Jwt.decodeRaw(t, config.get[String]("enval.secret_key"), Seq(JwtAlgorithm.HS256))
+//          token.getOrElse("false")
+//        case _ => "false"
+//
+//      }
+//      Ok(result)
+//
+//  }
 }
