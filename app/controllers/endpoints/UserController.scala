@@ -1,14 +1,16 @@
 package controllers.endpoints
 
-import controllers.requests.UserLoginRequest
-import controllers.responses.UserLoginResponse
+import controllers.requests.{UserLoginRequest, UserSignUpRequest}
+import controllers.responses.{UserLoginResponse, UserSignUpResponse}
+
 import javax.inject._
 import scala.concurrent.ExecutionContext
-import domains.usecases.{UserLoginData, UserUsecaseInputPort}
+import domains.usecases.{UserLoginData, UserSignUpData, UserUsecaseInputPort}
 import io.circe.syntax._
 import io.circe.generic.auto._
 import play.api.libs.circe.Circe
 import play.api.mvc.{Action, _}
+
 import java.time.Clock
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim, JwtHeader, JwtOptions}
 import play.api.Configuration
@@ -28,13 +30,16 @@ class UserController @Inject()(
       val username = request.body.username
       val password = request.body.password
       val input = UserLoginData(username, password)
-      // ログイン認証処理
+      // ログイン処理
       for {
         result <- userUsecase.login(input)
       } yield {
         //正しいユーザーだった場合
         if(result.value > 0) {
-          val token = Jwt.encode(s"""{"user_id":${result.value}}""", config.get[String]("enval.secret_key") , JwtAlgorithm.HS256)
+          val token = Jwt.encode(JwtClaim({s"""{"user_id":${result.value}}"""})
+            //有効期限を３日に設定
+            .issuedNow.expiresIn(86400*3), config.get[String]("enval.secret_key"),
+            JwtAlgorithm.HS256)
           //レスポンスとしてtokenをJSONに変換して返す
           Ok(UserLoginResponse(Option(token)).asJson)
         } else {
@@ -43,39 +48,29 @@ class UserController @Inject()(
       }
   }
 
-  def auth() :Action[AnyContent] = Action{
-    implicit  request: Request[AnyContent] =>
+  def signUp() = Action(circe.json[UserSignUpRequest]).async {
+    implicit request =>
       implicit val clock: Clock = Clock.systemUTC
-      val token = request.headers.get("Authorization")
-      println(token)
-      println("aa")
-      val result: String = token match {
-        case Some(t) =>
-          //Authenticationヘッダからtokenを読み込むj
-           val token = Jwt.decodeRaw(t, config.get[String]("enval.secret_key"), Seq(JwtAlgorithm.HS256))
-          token.getOrElse("false")
-        case _ => "false"
-
+      val username = request.body.username
+      val password = request.body.password
+      val input = UserSignUpData(username, password)
+      // ユーザー登録処理
+      for {
+        result <- userUsecase.signUp(input)
+      } yield {
+        //正常に登録できた場合
+        if(result > 0) {
+//          TODO loginと処理を共通化させる
+          val token = Jwt.encode(JwtClaim({s"""{"user_id":${result}}"""})
+            //有効期限を３日に設定
+            .issuedNow.expiresIn(86400*3), config.get[String]("enval.secret_key"),
+            JwtAlgorithm.HS256)
+          //レスポンスとしてtokenをJSONに変換して返す
+          Ok(UserSignUpResponse(Option(token)).asJson)
+        } else {
+          Ok(UserSignUpResponse(None).asJson)
+        }
       }
-      Ok(result)
-
   }
 
-//  def auth() :Action[AnyContent] = Action{
-//    implicit  request: Request[AnyContent] =>
-//      implicit val clock: Clock = Clock.systemUTC
-//      val token = request.headers.get("Authorization")
-//      println(token)
-//      println("aa")
-//      val result: String = token match {
-//        case Some(t) =>
-//          //Authenticationヘッダからtokenを読み込むj
-//          val token = Jwt.decodeRaw(t, config.get[String]("enval.secret_key"), Seq(JwtAlgorithm.HS256))
-//          token.getOrElse("false")
-//        case _ => "false"
-//
-//      }
-//      Ok(result)
-//
-//  }
 }

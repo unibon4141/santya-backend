@@ -1,28 +1,16 @@
 package controllers.endpoints
 
-
-
-import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
-import controllers.requests.UserLoginRequest
-import controllers.responses.UserLoginResponse
-
+import akka.http.scaladsl.model.HttpEntity
 import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
-import domains.usecases.{UserLoginData, UserUsecaseInputPort}
-import io.circe.syntax._
-import io.circe.generic.auto._
-import play.api.libs.circe.Circe
-import play.api.mvc.{Action, _}
-
+import play.api.mvc._
 import java.time.Clock
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim, JwtHeader, JwtOptions}
 import play.api.Configuration
-import play.api.mvc.Results.Redirect
+import play.api.mvc.Results.{Redirect, Status}
+import scala.util.{Failure, Success}
 
-//店舗の追加丶編集ができるコントローラー
-//@Singleton
 class Auth @Inject()(
-                                userUsecase: UserUsecaseInputPort,
                                 config: Configuration,
                                 parser: BodyParsers.Default
                               )(implicit ec: ExecutionContext)
@@ -30,41 +18,19 @@ class Auth @Inject()(
  {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
     implicit val clock: Clock = Clock.systemUTC
-    println("invoke exe")
     val token = request.headers.get("Authorization")
-    println(token)
-    println("aa")
-    val result: String = token match {
+  token match {
       case Some(t) =>
         //Authenticationヘッダからtokenを読み込むj
-        val token = Jwt.decodeRaw(t, config.get[String]("enval.secret_key"), Seq(JwtAlgorithm.HS256))
-        token.getOrElse("false")
-      case _ => "false"
-
-    }
-    if(result == "false") {
-      Future(Redirect("/shops/"))
-    } else {
-      block(request)
-
+        val tokenDecoded = Jwt.decodeRaw(t, config.get[String]("enval.secret_key"), Seq(JwtAlgorithm.HS256))
+        tokenDecoded match {
+          case Success(r) =>  block(request)
+          case Failure(exception) =>
+          Future(Status(401))
+        }
+      case _ =>
+//        認証が失敗した場合（jwtの改ざんがあった場合など）
+        Future(Status(401))
     }
   }
-
-  //  def auth() :Action[AnyContent] = Action{
-  //    implicit  request: Request[AnyContent] =>
-  //      implicit val clock: Clock = Clock.systemUTC
-  //      val token = request.headers.get("Authorization")
-  //      println(token)
-  //      println("aa")
-  //      val result: String = token match {
-  //        case Some(t) =>
-  //          //Authenticationヘッダからtokenを読み込むj
-  //          val token = Jwt.decodeRaw(t, config.get[String]("enval.secret_key"), Seq(JwtAlgorithm.HS256))
-  //          token.getOrElse("false")
-  //        case _ => "false"
-  //
-  //      }
-  //      Ok(result)
-  //
-  //  }
 }

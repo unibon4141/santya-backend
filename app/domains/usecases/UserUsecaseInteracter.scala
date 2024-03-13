@@ -20,5 +20,17 @@ class UserUsecaseInteracter @Inject()(
       UserId(result)
     }
   }
+
+  def signUp(input: UserSignUpData): Future[Int] = {
+//    TODO flatMapを使ってFutureを外してる処理の流れがイマイチ理解できていない
+    userRepository.existUserByUsername(input.username).flatMap {
+      case true => Future.successful(0)
+      case false =>
+      for {
+           _ <- userRepository.signUp(input.username, input.password)
+          userId <- userRepository.getIdByUsername(input.username)
+        } yield userId
+    }
+  }
 }
 

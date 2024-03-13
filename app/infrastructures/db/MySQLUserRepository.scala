@@ -24,4 +24,29 @@ class MySQLUserRepository @Inject() (
         }
       }
   }
+
+  def signUp(username: String, password: String): Future[Int] = {
+    val action = T.Users.map(u => (u.userName,u.password )) += (username, password)
+    db.run(action)
+  }
+
+  def existUserByUsername(username: String): Future[Boolean] = {
+    val action = T.Users.filter(u => u.userName === username).result
+    db.run(action).map {
+      result =>
+        if(result.nonEmpty) {
+          true
+        } else {
+          false
+        }
+    }
+  }
+
+  def getIdByUsername(username: String): Future[Int] = {
+    val action = T.Users.filter(u => u.userName === username).result
+    db.run(action).map {
+      result =>
+        result.head.userId
+    }
+  }
 }

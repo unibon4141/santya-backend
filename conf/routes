@@ -11,11 +11,10 @@ GET       /shops/:shopId/comments/        controllers.endpoints.ShopCommentContr
 POST      /shops/:shopId/comments/        controllers.endpoints.ShopCommentController.post(shopId: Int)
 
 ## ユーザー系
-## GET          /users/        ユーザーを新規登録
++nocsrf
+POST      /users/                         controllers.endpoints.UserController.signUp()
 +nocsrf
 POST      /login/                         controllers.endpoints.UserController.index()
-+nocsrf
-POST      /auth/                         controllers.endpoints.UserController.auth()
 ## ログアウㇳ機能
 ## GET         /users/:id/favorite/:id/        ユーザー[:id]のすべてのお気に入り店舗を取得
 ## PUT         /users/:id/favorite/:id/        ユーザー[id]の店舗[id]のお気に入り登録を切り替え
