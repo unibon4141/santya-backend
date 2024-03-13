@@ -12,3 +12,6 @@ case class UserSignUpRequest(
 case class UserAuthRequest(
                           token: String
                            )
+case class UserIdResponse(
+                            user_id: String
+                          )

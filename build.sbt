@@ -24,7 +24,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
     libraryDependencies += "com.dripower" %% "play-circe" % "2814.1",
     //    base64エンコード用
     libraryDependencies += "commons-codec" % "commons-codec" % "1.16.0",
-    libraryDependencies += "com.github.jwt-scala" %% "jwt-core" % "10.0.0",
+    libraryDependencies += "com.github.jwt-scala" %% "jwt-circe" % "10.0.0",
     //    Slick
     libraryDependencies += "com.typesafe.play" %% "play-slick" % "5.1.0",
     libraryDependencies += "com.typesafe.slick" %% "slick-codegen" % "3.4.1"

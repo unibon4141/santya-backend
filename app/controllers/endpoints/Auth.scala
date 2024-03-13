@@ -1,13 +1,12 @@
 package controllers.endpoints
 
-import akka.http.scaladsl.model.HttpEntity
 import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.mvc._
 import java.time.Clock
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim, JwtHeader, JwtOptions}
 import play.api.Configuration
-import play.api.mvc.Results.{Redirect, Status}
+import play.api.mvc.Results. Status
 import scala.util.{Failure, Success}
 
 class Auth @Inject()(
@@ -21,12 +20,11 @@ class Auth @Inject()(
     val token = request.headers.get("Authorization")
   token match {
       case Some(t) =>
-        //Authenticationヘッダからtokenを読み込むj
+        //Authorizationヘッダからtokenを読み込むj
         val tokenDecoded = Jwt.decodeRaw(t, config.get[String]("enval.secret_key"), Seq(JwtAlgorithm.HS256))
         tokenDecoded match {
           case Success(r) =>  block(request)
-          case Failure(exception) =>
-          Future(Status(401))
+          case Failure(exception) => Future(Status(401))
         }
       case _ =>
 //        認証が失敗した場合（jwtの改ざんがあった場合など）

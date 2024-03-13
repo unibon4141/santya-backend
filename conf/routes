@@ -1,4 +1,3 @@
-## Routes
 ## 店舗系
 GET       /shops/:shopId/                 controllers.endpoints.ShopDetailController.index(shopId: Int)
 GET       /shops/                         controllers.endpoints.ShopSearchController.index(word: Option[String], sceneId: Option[Int])
@@ -7,23 +6,18 @@ POST      /shops/                         controllers.endpoints.ShopManagementCo
 +nocsrf
 PUT       /shops/:shopId/                 controllers.endpoints.ShopManagementController.edit(shopId :Int)
 GET       /shops/:shopId/comments/        controllers.endpoints.ShopCommentController.index(shopId: Int)
-#本当はshopIdをここで受け取る必要はないが、URIとしてはshop_idを入れたいのでこの形にしている。アクションの引数から外せるのがベスト
+#TODO 本当はshopIdをここで受け取る必要はないが、URIとしてはshop_idを入れたいのでこの形にしている。アクションの引数から外せるのがベスト
 POST      /shops/:shopId/comments/        controllers.endpoints.ShopCommentController.post(shopId: Int)
-
 ## ユーザー系
 +nocsrf
-POST      /users/                         controllers.endpoints.UserController.signUp()
+POST      /signup/                         controllers.endpoints.UserController.signUp()
 +nocsrf
 POST      /login/                         controllers.endpoints.UserController.index()
-## ログアウㇳ機能
-## GET         /users/:id/favorite/:id/        ユーザー[:id]のすべてのお気に入り店舗を取得
+GET      /users/id/                       controllers.endpoints.UserController.getUserIdBytoken()
+## GET         /users/:userId/favorite/      ユーザー[:id]のすべてのお気に入り店舗を取得
 ## PUT         /users/:id/favorite/:id/        ユーザー[id]の店舗[id]のお気に入り登録を切り替え
 ##
 ## シーン系
 GET        /scenes/            controllers.endpoints.SceneController.index()
 #ジャンル系
 #GET       /genres/
-##
-#
-## Map static resources from the /public folder to the /assets URL path
-#GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
