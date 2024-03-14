@@ -12,6 +12,6 @@ case class UserSignUpRequest(
 case class UserAuthRequest(
                           token: String
                            )
-case class UserIdResponse(
+case class getFavoriteShopsRequest(
                             user_id: String
                           )

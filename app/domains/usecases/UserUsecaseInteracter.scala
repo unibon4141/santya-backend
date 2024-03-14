@@ -1,7 +1,8 @@
 package domains.usecases
 
 import domains.repositories.UserRepository
-import entities.UserId
+import entities.{Shop, UserId}
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,5 +33,12 @@ class UserUsecaseInteracter @Inject()(
         } yield userId
     }
   }
+
+  def getFavoriteShops(input: getFavoriteShopsData): Future[Seq[Shop]] = {
+    for {
+      shops <- userRepository.getFavoriteShops(input.userId)
+    } yield shops
+  }
+
 }
 

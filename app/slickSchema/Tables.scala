@@ -14,7 +14,7 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(Comment.schema, Genre.schema, Map.schema, Menu.schema, Pricerange.schema, Scene.schema, Shopimage.schema, Shops.schema, Users.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(Comment.schema, Favoriteshop.schema, Genre.schema, Map.schema, Menu.schema, Pricerange.schema, Scene.schema, Shopimage.schema, Shops.schema, Users.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -58,6 +58,32 @@ trait Tables {
   }
   /** Collection-like TableQuery object for table Comment */
   lazy val Comment = new TableQuery(tag => new Comment(tag))
+
+  /** Entity class storing rows of table Favoriteshop
+   *  @param favoriteShopId Database column favorite_shop_id SqlType(INT), AutoInc, PrimaryKey
+   *  @param userId Database column user_id SqlType(INT)
+   *  @param shopId Database column shop_id SqlType(INT) */
+  case class FavoriteshopRow(favoriteShopId: Int, userId: Int, shopId: Int)
+  /** GetResult implicit for fetching FavoriteshopRow objects using plain SQL queries */
+  implicit def GetResultFavoriteshopRow(implicit e0: GR[Int]): GR[FavoriteshopRow] = GR{
+    prs => import prs._
+    FavoriteshopRow.tupled((<<[Int], <<[Int], <<[Int]))
+  }
+  /** Table description of table favoriteShop. Objects of this class serve as prototypes for rows in queries. */
+  class Favoriteshop(_tableTag: Tag) extends profile.api.Table[FavoriteshopRow](_tableTag, Some("demo"), "favoriteShop") {
+    def * = (favoriteShopId, userId, shopId).<>(FavoriteshopRow.tupled, FavoriteshopRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(favoriteShopId), Rep.Some(userId), Rep.Some(shopId))).shaped.<>({r=>import r._; _1.map(_=> FavoriteshopRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column favorite_shop_id SqlType(INT), AutoInc, PrimaryKey */
+    val favoriteShopId: Rep[Int] = column[Int]("favorite_shop_id", O.AutoInc, O.PrimaryKey)
+    /** Database column user_id SqlType(INT) */
+    val userId: Rep[Int] = column[Int]("user_id")
+    /** Database column shop_id SqlType(INT) */
+    val shopId: Rep[Int] = column[Int]("shop_id")
+  }
+  /** Collection-like TableQuery object for table Favoriteshop */
+  lazy val Favoriteshop = new TableQuery(tag => new Favoriteshop(tag))
 
   /** Entity class storing rows of table Genre
    *  @param genreId Database column genre_id SqlType(INT), AutoInc, PrimaryKey

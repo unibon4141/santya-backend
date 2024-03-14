@@ -1,14 +1,10 @@
 package controllers.responses
-
-import io.circe.CursorOp.DownField
-
 case class UserLoginResponse(
                             token: Option[String]
                             )
 case class UserSignUpResponse(
                               token: Option[String]
                             )
-
 case class UserIdAuthResponse(
                                user_id: Int
                              )

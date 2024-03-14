@@ -82,7 +82,7 @@ object SlickModelGenerator {
         "genre",
         "scene",
         "comment",
-        "favoriteShops",
+        "favoriteShop",
         "shopImage",
         "menu"
       )

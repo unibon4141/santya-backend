@@ -1,11 +1,12 @@
 package controllers.endpoints
 
-import controllers.requests.{UserIdResponse, UserLoginRequest, UserSignUpRequest}
-import controllers.responses.{UserIdAuthResponse, UserLoginResponse, UserSignUpResponse}
+import controllers.requests.{ShopManagementRequest, UserLoginRequest, UserSignUpRequest, getFavoriteShopsRequest}
+import controllers.responses.{ShopResponse, UserIdAuthResponse, UserLoginResponse, UserSignUpResponse}
 
 import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
-import domains.usecases.{UserLoginData, UserSignUpData, UserUsecaseInputPort}
+import domains.usecases.{UserLoginData, UserSignUpData, UserUsecaseInputPort, getFavoriteShopsData}
+import entities.UserId
 import io.circe.CursorOp.DownField
 import io.circe.{Decoder, HCursor, KeyDecoder, KeyEncoder}
 import io.circe.syntax._
@@ -14,7 +15,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 
 import java.time.Clock
-import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim, JwtHeader, JwtOptions, JwtCirce}
+import pdi.jwt.{Jwt, JwtAlgorithm, JwtCirce, JwtClaim, JwtHeader, JwtOptions}
 import play.api.Configuration
 import play.api.mvc.Results.Status
 
@@ -25,6 +26,7 @@ import scala.util.{Failure, Success}
 class UserController @Inject()(
                                           userUsecase: UserUsecaseInputPort,
                                           val controllerComponents: ControllerComponents,
+                                          auth: Auth,
                                           config: Configuration
                                         )(implicit ec: ExecutionContext)
   extends BaseController
@@ -94,7 +96,7 @@ class UserController @Inject()(
             case Success(value) =>
               val tokenStr = value.content
               val pattern = "user_id"
-//              claimからuserIdを取得
+              //claimからuserIdを取得
               val start = pattern.r.findAllIn(tokenStr).matchData.map(_.end).toList.head+2
               val end = "}".r.findAllIn(tokenStr).matchData.map(_.start).toList.head
               val output = UserIdAuthResponse(tokenStr.substring(start,end).toInt).asJson
@@ -107,5 +109,48 @@ class UserController @Inject()(
         Status(401)
       }
   }
+
+  /**
+   * お気に入り店舗の一覧を取得
+   * @return
+   */
+  def getFavoriteShops(userId: Int) =
+    auth.async {
+      implicit request =>
+        implicit val clock: Clock = Clock.systemUTC
+        val token = request.headers.get("Authorization")
+        token match {
+          case Some(t) =>
+            //Authorizationヘッダからtokpenを読み込むj
+            val tokenDecoded = Jwt.decode(t, config.get[String]("enval.secret_key"), Seq(JwtAlgorithm.HS256))
+            tokenDecoded match {
+              case Success(value) =>
+                val tokenStr = value.content
+                val pattern = "user_id"
+                //claimからuserIdを取得
+                val start = pattern.r.findAllIn(tokenStr).matchData.map(_.end).toList.head + 2
+                val end = "}".r.findAllIn(tokenStr).matchData.map(_.start).toList.head
+                val userIdByToken = tokenStr.substring(start, end).toInt
+//                本人確認
+                if(userIdByToken == userId) {
+//                  お気に入り店舗追加
+                  val input  = getFavoriteShopsData(UserId(userId))
+                  for {
+                    shops <- userUsecase.getFavoriteShops(input)
+                  } yield {
+                    Ok(ShopResponse.make(shops).asJson)
+                  }
+
+                } else {
+                  Future.successful(Status(401))
+                }
+              case Failure(exception) => Future.successful(Status(401))
+            }
+          case _ =>
+            //認証が失敗した場合（jwtの改ざんがあった場合など）
+            Future.successful(Status(401))
+        }
+    }
+
 
 }
