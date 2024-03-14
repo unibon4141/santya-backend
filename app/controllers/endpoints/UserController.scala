@@ -1,12 +1,12 @@
 package controllers.endpoints
 
 import controllers.requests.{ShopManagementRequest, UserLoginRequest, UserSignUpRequest, getFavoriteShopsRequest}
-import controllers.responses.{ShopResponse, UserIdAuthResponse, UserLoginResponse, UserSignUpResponse}
+import controllers.responses.{ShopResponse, ToggleFavoriteResponse, UserIdAuthResponse, UserLoginResponse, UserSignUpResponse}
 
 import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
-import domains.usecases.{UserLoginData, UserSignUpData, UserUsecaseInputPort, getFavoriteShopsData}
-import entities.UserId
+import domains.usecases.{UserLoginData, UserSignUpData, UserUsecaseInputPort, getFavoriteShopsData, toggleFavoriteShopData}
+import entities.{ShopId, UserId}
 import io.circe.CursorOp.DownField
 import io.circe.{Decoder, HCursor, KeyDecoder, KeyEncoder}
 import io.circe.syntax._
@@ -133,12 +133,54 @@ class UserController @Inject()(
                 val userIdByToken = tokenStr.substring(start, end).toInt
 //                本人確認
                 if(userIdByToken == userId) {
-//                  お気に入り店舗追加
+//                  お気に入り店舗取得
                   val input  = getFavoriteShopsData(UserId(userId))
                   for {
                     shops <- userUsecase.getFavoriteShops(input)
                   } yield {
                     Ok(ShopResponse.make(shops).asJson)
+                  }
+
+                } else {
+                  Future.successful(Status(401))
+                }
+              case Failure(exception) => Future.successful(Status(401))
+            }
+          case _ =>
+            //認証が失敗した場合（jwtの改ざんがあった場合など）
+            Future.successful(Status(401))
+        }
+    }
+
+  /**
+   * お気に入り店舗の追加・削除
+   * @param userId
+   * @return
+   */
+  def toggleFavoriteShop(userId: Int, shopId: Int) =
+    auth.async {
+      implicit request =>
+        implicit val clock: Clock = Clock.systemUTC
+        val token = request.headers.get("Authorization")
+        token match {
+          case Some(t) =>
+            //Authorizationヘッダからtokpenを読み込むj
+            val tokenDecoded = Jwt.decode(t, config.get[String]("enval.secret_key"), Seq(JwtAlgorithm.HS256))
+            tokenDecoded match {
+              case Success(value) =>
+                val tokenStr = value.content
+                val pattern = "user_id"
+                //claimからuserIdを取得
+                val start = pattern.r.findAllIn(tokenStr).matchData.map(_.end).toList.head + 2
+                val end = "}".r.findAllIn(tokenStr).matchData.map(_.start).toList.head
+                val userIdByToken = tokenStr.substring(start, end).toInt
+                //本人確認
+                if(userIdByToken == userId) {
+                  val input  = toggleFavoriteShopData(UserId(userId), ShopId(shopId))
+                  for {
+                    result <- userUsecase.toggleFavoriteShop(input)
+                  } yield {
+                    Ok(ToggleFavoriteResponse(result).asJson)
                   }
 
                 } else {

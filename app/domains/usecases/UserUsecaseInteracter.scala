@@ -40,5 +40,19 @@ class UserUsecaseInteracter @Inject()(
     } yield shops
   }
 
+  def toggleFavoriteShop(input: toggleFavoriteShopData): Future[Int] = {
+    userRepository.existFavoriteShop(input.userId, input.shopId).flatMap {isExist =>
+      if(isExist) {
+        userRepository.removeFavoriteShop(input.userId, input.shopId).flatMap {removeResult =>
+          if(removeResult) Future.successful(2) else Future.successful(4)
+        }
+      } else {
+        userRepository.addFavoriteShop(input.userId, input.shopId).flatMap {addResult =>
+          if(addResult) Future.successful(1) else Future.successful(3)
+        }
+      }
+    }
+  }
+
 }
 

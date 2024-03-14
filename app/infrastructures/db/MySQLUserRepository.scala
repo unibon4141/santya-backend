@@ -83,5 +83,32 @@ class MySQLUserRepository @Inject() (
         )
     }
   }
-
+  def existFavoriteShop(userId: UserId, shopId: ShopId): Future[Boolean] = {
+    val action = {
+      T.Favoriteshop.filter(f => f.userId === userId.value && f.shopId === shopId.value).result
+    }
+    db.run(action).map{ result =>
+      result.headOption match {
+        case Some(_) => true
+        case None => false
+      }
+    }
+  }
+  def addFavoriteShop(userId: UserId, shopId: ShopId): Future[Boolean] = {
+    val action = {
+      T.Favoriteshop.map(f => (f.userId, f.shopId)) += (userId.value, shopId.value)
+    }
+    db.run(action).map { result =>
+      if(result > 0) true else false
+    }
+  }
+  def removeFavoriteShop(userId: UserId, shopId: ShopId): Future[Boolean] = {
+    val action = {
+      T.Favoriteshop.filter(f => f.userId === userId.value && f.shopId === shopId.value)
+        .delete
+    }
+    db.run(action).map{ result =>
+      if(result > 0) true else false
+    }
+  }
 }

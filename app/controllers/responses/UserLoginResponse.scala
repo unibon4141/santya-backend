@@ -8,3 +8,7 @@ case class UserSignUpResponse(
 case class UserIdAuthResponse(
                                user_id: Int
                              )
+
+case class ToggleFavoriteResponse(
+                               status: Int
+                             )

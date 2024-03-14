@@ -15,7 +15,8 @@ POST      /signup/                         controllers.endpoints.UserController.
 POST      /login/                         controllers.endpoints.UserController.index()
 GET      /users/id/                       controllers.endpoints.UserController.getUserIdBytoken()
 GET      /users/:userId/favorite/      controllers.endpoints.UserController.getFavoriteShops(userId: Int)
-## PUT         /users/:id/favorite/:id/        ユーザー[id]の店舗[id]のお気に入り登録を切り替え
++nocsrf
+PUT     /users/:userId/favorite/:shopId/          controllers.endpoints.UserController.toggleFavoriteShop(userId: Int, shopId: Int)
 ##
 ## シーン系
 GET        /scenes/            controllers.endpoints.SceneController.index()
