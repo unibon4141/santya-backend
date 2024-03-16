@@ -1,15 +1,13 @@
 package infrastructures.db
 import domains.repositories.UserRepository
-import entities.{Address, Genre, GenreId, MapId, PriceRange, Scene, SceneId, Shop, ShopId, UserId}
+import entities.{Address, Genre, GenreId, MapId, PriceRange, Scene, Shop, ShopId, UserId}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-
 import scala.concurrent.{ExecutionContext, Future}
 import slickSchema.{Tables => T}
 import slick.jdbc.MySQLProfile.api._
 import slick.jdbc.JdbcProfile
-
-import java.time.LocalDateTime
 import javax.inject.Inject
+
 class MySQLUserRepository @Inject() (
                                             protected val dbConfigProvider: DatabaseConfigProvider
                                           )(implicit ec: ExecutionContext)

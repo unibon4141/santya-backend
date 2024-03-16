@@ -27,5 +27,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
     libraryDependencies += "com.github.jwt-scala" %% "jwt-circe" % "10.0.0",
     //    Slick
     libraryDependencies += "com.typesafe.play" %% "play-slick" % "5.1.0",
-    libraryDependencies += "com.typesafe.slick" %% "slick-codegen" % "3.4.1"
+    libraryDependencies += "com.typesafe.slick" %% "slick-codegen" % "3.4.1",
+
+//    GCS
+    libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "2.35.0"
   )

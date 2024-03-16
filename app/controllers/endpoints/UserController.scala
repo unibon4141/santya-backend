@@ -1,13 +1,12 @@
 package controllers.endpoints
 
-import controllers.requests.{ShopManagementRequest, UserLoginRequest, UserSignUpRequest, getFavoriteShopsRequest}
+import controllers.requests.{UserLoginRequest, UserSignUpRequest}
 import controllers.responses.{ShopResponse, ToggleFavoriteResponse, UserIdAuthResponse, UserLoginResponse, UserSignUpResponse}
 
 import javax.inject._
 import scala.concurrent.{ExecutionContext, Future}
 import domains.usecases.{UserLoginData, UserSignUpData, UserUsecaseInputPort, getFavoriteShopsData, toggleFavoriteShopData}
 import entities.{ShopId, UserId}
-import io.circe.CursorOp.DownField
 import io.circe.{Decoder, HCursor, KeyDecoder, KeyEncoder}
 import io.circe.syntax._
 import io.circe.generic.auto._
@@ -17,9 +16,8 @@ import play.api.mvc._
 import java.time.Clock
 import pdi.jwt.{Jwt, JwtAlgorithm, JwtCirce, JwtClaim, JwtHeader, JwtOptions}
 import play.api.Configuration
-import play.api.mvc.Results.Status
 
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 //店舗の追加丶編集ができるコントローラー
 //@Singleton
@@ -194,5 +192,38 @@ class UserController @Inject()(
         }
     }
 
+//  private def getUserIdyString(claimOpt: Option[String], userId: Int): Future[Result] = {
+//    implicit val clock: Clock = Clock.systemUTC
+//    claimOpt match {
+//      case Some(claim) =>
+//        //Authorizationヘッダからtokpenを読み込むj
+//        val tokenDecoded = Jwt.decode(claim, config.get[String]("enval.secret_key"), Seq(JwtAlgorithm.HS256))
+//        tokenDecoded match {
+//          case Success(value) =>
+//            val tokenStr = value.content
+//            val pattern = "user_id"
+//            //claimからuserIdを取得
+//            val start = pattern.r.findAllIn(tokenStr).matchData.map(_.end).toList.head + 2
+//            val end = "}".r.findAllIn(tokenStr).matchData.map(_.start).toList.head
+//            val userIdByToken = tokenStr.substring(start, end).toInt
+//            //本人確認
+//            if (userIdByToken == userId) {
+//              val input = toggleFavoriteShopData(UserId(userId), ShopId(shopId))
+//              for {
+//                result <- userUsecase.toggleFavoriteShop(input)
+//              } yield {
+//                Ok(ToggleFavoriteResponse(result).asJson)
+//              }
+//
+//            } else {
+//              Future.successful(Status(401))
+//            }
+//          case Failure(exception) => Future.successful(Status(401))
+//        }
+//      case _ =>
+//        //認証が失敗した場合（jwtの改ざんがあった場合など）
+//        Future.successful(Status(401))
+//    }
+//  }
 
 }

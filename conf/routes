@@ -3,6 +3,8 @@ GET       /shops/:shopId/                 controllers.endpoints.ShopDetailContro
 GET       /shops/                         controllers.endpoints.ShopSearchController.index(word: Option[String], sceneId: Option[Int])
 +nocsrf
 POST      /shops/                         controllers.endpoints.ShopManagementController.index()
+
+POST       /shops/upload/                  controllers.endpoints.ShopManagementController.upload()
 +nocsrf
 PUT       /shops/:shopId/                 controllers.endpoints.ShopManagementController.edit(shopId :Int)
 GET       /shops/:shopId/comments/        controllers.endpoints.ShopCommentController.index(shopId: Int)
@@ -22,3 +24,5 @@ PUT     /users/:userId/favorite/:shopId/          controllers.endpoints.UserCont
 GET        /scenes/            controllers.endpoints.SceneController.index()
 #ジャンル系
 #GET       /genres/
+
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

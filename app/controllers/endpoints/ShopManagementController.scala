@@ -8,8 +8,11 @@ import domains.usecases.{ShopManagementEditInputData, ShopManagementInputData, S
 import entities.{GenreId, PriceRangeId, SceneId, ShopId}
 import io.circe.syntax._
 import io.circe.generic.auto._
+import play.api.libs.Files
 import play.api.libs.circe.Circe
 import play.api.mvc._
+
+import java.nio.file.Paths
 
 //店舗の追加丶編集ができるコントローラー
 @Singleton
@@ -69,6 +72,24 @@ class ShopManagementController @Inject()(
           //店舗名の重複があった場合は、エラーを返す
           Status(409)
         }
+      }
+  }
+
+  def upload: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>
+    request.body
+      .file("file1")
+      .map { picture =>
+        // only get the last part of the filename
+        // otherwise someone can send a path like ../../home/foo/bar.txt to write to other files on the system
+        val filename    = Paths.get(picture.filename).getFileName
+        val fileSize    = picture.fileSize
+        val contentType = picture.contentType
+        picture.ref.copyTo(Paths.get(s"./tmp/picture/${filename}"), replace = true)
+        Ok("File uploaded")
+      }
+      .getOrElse {
+//        Redirect(routes.HomeController.index()).flashing("error" -> "Missing file")
+        Ok("false")
       }
   }
 }
