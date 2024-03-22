@@ -28,6 +28,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
     //    Slick
     libraryDependencies += "com.typesafe.play" %% "play-slick" % "5.1.0",
     libraryDependencies += "com.typesafe.slick" %% "slick-codegen" % "3.4.1",
+//    試験的
+    libraryDependencies += "com.google.cloud.sql" % "mysql-socket-factory-connector-j-8" % "1.7.0",
 
 //    GCS
     libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "2.35.0"
