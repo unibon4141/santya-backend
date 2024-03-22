@@ -1,9 +1,7 @@
 package domains.usecases
 
-import controllers.requests.ShopCommentRequest
 import domains.repositories.ShopCommentRepository
-import entities.{Shop, ShopComment, ShopId}
-import views.html.helper.input
+import entities.{ShopComment, ShopId}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
