@@ -257,21 +257,18 @@ trait Tables {
    *  @param distance Database column distance SqlType(DOUBLE)
    *  @param createdTime Database column created_time SqlType(DATETIME)
    *  @param updatedTime Database column updated_time SqlType(DATETIME)
-   *  @param deleteFlg Database column delete_flg SqlType(BIT), Default(false)
-   *  @param image1 Database column image1 SqlType(MEDIUMBLOB), Default(None)
-   *  @param image2 Database column image2 SqlType(MEDIUMBLOB), Default(None)
-   *  @param image3 Database column image3 SqlType(MEDIUMBLOB), Default(None) */
-  case class ShopsRow(shopId: Int, shopName: String, mapId: Int, genreId: Int, sceneId1: Option[Int] = None, sceneId2: Option[Int] = None, lunchPriceRangeId: Option[Int] = None, dinnerPriceRangeId: Option[Int] = None, shopAddress: String, distance: Double, createdTime: java.sql.Timestamp, updatedTime: java.sql.Timestamp, deleteFlg: Boolean = false, image1: Option[Array[Byte]] = None, image2: Option[Array[Byte]] = None, image3: Option[Array[Byte]] = None)
+   *  @param deleteFlg Database column delete_flg SqlType(BIT), Default(false) */
+  case class ShopsRow(shopId: Int, shopName: String, mapId: Int, genreId: Int, sceneId1: Option[Int] = None, sceneId2: Option[Int] = None, lunchPriceRangeId: Option[Int] = None, dinnerPriceRangeId: Option[Int] = None, shopAddress: String, distance: Double, createdTime: java.sql.Timestamp, updatedTime: java.sql.Timestamp, deleteFlg: Boolean = false)
   /** GetResult implicit for fetching ShopsRow objects using plain SQL queries */
-  implicit def GetResultShopsRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[Int]], e3: GR[Double], e4: GR[java.sql.Timestamp], e5: GR[Boolean], e6: GR[Option[Array[Byte]]]): GR[ShopsRow] = GR{
+  implicit def GetResultShopsRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[Int]], e3: GR[Double], e4: GR[java.sql.Timestamp], e5: GR[Boolean]): GR[ShopsRow] = GR{
     prs => import prs._
-    ShopsRow.tupled((<<[Int], <<[String], <<[Int], <<[Int], <<?[Int], <<?[Int], <<?[Int], <<?[Int], <<[String], <<[Double], <<[java.sql.Timestamp], <<[java.sql.Timestamp], <<[Boolean], <<?[Array[Byte]], <<?[Array[Byte]], <<?[Array[Byte]]))
+    ShopsRow.tupled((<<[Int], <<[String], <<[Int], <<[Int], <<?[Int], <<?[Int], <<?[Int], <<?[Int], <<[String], <<[Double], <<[java.sql.Timestamp], <<[java.sql.Timestamp], <<[Boolean]))
   }
   /** Table description of table shops. Objects of this class serve as prototypes for rows in queries. */
   class Shops(_tableTag: Tag) extends profile.api.Table[ShopsRow](_tableTag, Some("demo"), "shops") {
-    def * = (shopId, shopName, mapId, genreId, sceneId1, sceneId2, lunchPriceRangeId, dinnerPriceRangeId, shopAddress, distance, createdTime, updatedTime, deleteFlg, image1, image2, image3).<>(ShopsRow.tupled, ShopsRow.unapply)
+    def * = (shopId, shopName, mapId, genreId, sceneId1, sceneId2, lunchPriceRangeId, dinnerPriceRangeId, shopAddress, distance, createdTime, updatedTime, deleteFlg).<>(ShopsRow.tupled, ShopsRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(shopId), Rep.Some(shopName), Rep.Some(mapId), Rep.Some(genreId), sceneId1, sceneId2, lunchPriceRangeId, dinnerPriceRangeId, Rep.Some(shopAddress), Rep.Some(distance), Rep.Some(createdTime), Rep.Some(updatedTime), Rep.Some(deleteFlg), image1, image2, image3)).shaped.<>({r=>import r._; _1.map(_=> ShopsRow.tupled((_1.get, _2.get, _3.get, _4.get, _5, _6, _7, _8, _9.get, _10.get, _11.get, _12.get, _13.get, _14, _15, _16)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(shopId), Rep.Some(shopName), Rep.Some(mapId), Rep.Some(genreId), sceneId1, sceneId2, lunchPriceRangeId, dinnerPriceRangeId, Rep.Some(shopAddress), Rep.Some(distance), Rep.Some(createdTime), Rep.Some(updatedTime), Rep.Some(deleteFlg))).shaped.<>({r=>import r._; _1.map(_=> ShopsRow.tupled((_1.get, _2.get, _3.get, _4.get, _5, _6, _7, _8, _9.get, _10.get, _11.get, _12.get, _13.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column shop_id SqlType(INT), AutoInc, PrimaryKey */
     val shopId: Rep[Int] = column[Int]("shop_id", O.AutoInc, O.PrimaryKey)
@@ -299,12 +296,6 @@ trait Tables {
     val updatedTime: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("updated_time")
     /** Database column delete_flg SqlType(BIT), Default(false) */
     val deleteFlg: Rep[Boolean] = column[Boolean]("delete_flg", O.Default(false))
-    /** Database column image1 SqlType(MEDIUMBLOB), Default(None) */
-    val image1: Rep[Option[Array[Byte]]] = column[Option[Array[Byte]]]("image1", O.Default(None))
-    /** Database column image2 SqlType(MEDIUMBLOB), Default(None) */
-    val image2: Rep[Option[Array[Byte]]] = column[Option[Array[Byte]]]("image2", O.Default(None))
-    /** Database column image3 SqlType(MEDIUMBLOB), Default(None) */
-    val image3: Rep[Option[Array[Byte]]] = column[Option[Array[Byte]]]("image3", O.Default(None))
 
     /** Uniqueness Index over (shopName) (database name shop_name) */
     val index1 = index("shop_name", shopName, unique=true)
