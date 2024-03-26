@@ -100,7 +100,10 @@ class ShopManagementController @Inject()(
 //        val filename    = Paths.get(picture.filename).getFileName
         val lastI = picture.filename.lastIndexOf(".")
         var extension = ""
-        // 新規ディレクトリ作成
+        //imagesディレクトリ作成
+        val dirParent = Paths.get("./public/images/")
+        if(F.notExists(dirParent)) F.createDirectory(dirParent) // mkdir
+        // 店舗用新規ディレクトリ作成
         val dir = Paths.get("./public/images/"+shopId+"/")
         if(F.notExists(dir)) F.createDirectory(dir) // mkdir
         if (lastI > 0) {
