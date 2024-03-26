@@ -27,7 +27,7 @@ class ShopSearchController @Inject() (
       for {
         output <- ShopSearchUsecase.handle(input)
       } yield
-        Ok(ShopResponse.make(output).asJson)
+        Ok(ShopResponse.make(output._1,output._2).asJson)
   }
 
 }

@@ -39,6 +39,7 @@ class MySQLShopDetailRepository @Inject() (
         dinnerPriceRange = shop.dinnerPriceRangeId.map(PriceRange.of),
         shopAddress = Option(Address(shop.shopAddress)),
         distance = shop.distance,
+        //暫定的
         createAt = shop.createdTime.toLocalDateTime,
         updatedAt = shop.updatedTime.toLocalDateTime
       )

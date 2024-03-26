@@ -6,7 +6,7 @@ import entities.{Shop, ShopId}
 import scala.concurrent.Future
 
 trait ShopSearchUsecaseInputPort {
-  def handle(input: ShopSearchInputData): Future[Seq[Shop]]
+  def handle(input: ShopSearchInputData): Future[(Seq[(Shop)], Seq[(Int, String)] )]
 
 }
 

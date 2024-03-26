@@ -12,3 +12,4 @@ target
 project/metals.sbt
 .ammonite/
 .vscode
+public/images

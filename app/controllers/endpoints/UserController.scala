@@ -136,7 +136,7 @@ class UserController @Inject()(
                   for {
                     shops <- userUsecase.getFavoriteShops(input)
                   } yield {
-                    Ok(ShopResponse.make(shops).asJson)
+                    Ok(ShopResponse.makeNoImage(shops).asJson)
                   }
 
                 } else {

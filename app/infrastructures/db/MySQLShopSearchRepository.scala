@@ -2,12 +2,14 @@ package infrastructures.db
 
 import domains.repositories.ShopSearchRepository
 import domains.usecases.ShopSearchInputData
-import entities.{Address, Genre, GenreId, MapId, PriceRange, Scene, Shop, ShopId}
+import entities.{Address, Genre, GenreId, ImageFile, MapId, PriceRange, Scene, Shop, ShopId}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+
 import scala.concurrent.{ExecutionContext, Future}
 import slickSchema.{Tables => T}
 import slick.jdbc.MySQLProfile.api._
 import slick.jdbc.JdbcProfile
+
 import javax.inject.Inject
 
 class MySQLShopSearchRepository @Inject() (
@@ -49,7 +51,6 @@ class MySQLShopSearchRepository @Inject() (
     for {
       rows <- db.run(action)
     } yield rows.map { case (shop, genre) =>
-
 //      DBから取得した結果をShopエンティティに格納
       Shop(
         id = ShopId(shop.shopId),
@@ -68,4 +69,19 @@ class MySQLShopSearchRepository @Inject() (
       )
     }
   }
+
+  def fetchImage(shopIds: Seq[ShopId]): Future[Seq[(Int, String)]] = {
+    val ids = shopIds.map(_.value)
+    val action = T.Shopimage.filter(image => image.shopId inSet ids).result
+    db.run(action).map {aa =>
+     aa.map(toEntity)
+
+    }
+
+  }
+
+  private def toEntity(input: T.Shopimage#TableElementType): (Int, String) = {
+    (input.shopId, input.imagePath)
+  }
+
 }

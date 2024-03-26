@@ -19,12 +19,13 @@ final case class ShopDetailResponse(
                                      dinner_max_price: Option[Int],
                                      shop_address: Option[String],
                                      distance: Double,
+                                     images: Seq[String],
                                      created_time: LocalDateTime,
                                      updated_time: LocalDateTime,
 
 )
 object ShopDetailResponse {
-  def make(shop: Shop) = {
+  def make(shop: Shop, images: Seq[(Int, String)]) = {
     ShopDetailResponse(
       shop_id = shop.id.value,
       shop_name = shop.name,
@@ -41,6 +42,7 @@ object ShopDetailResponse {
       dinner_max_price = shop.dinnerPriceRange.map(_.max),
       shop_address = shop.shopAddress.map(_.value),
       distance = shop.distance,
+      images = images.map(_._2),
       created_time = shop.createAt,
       updated_time = shop.updatedAt
     )

@@ -25,6 +25,6 @@ class ShopDetailController @Inject() (
       for {
         output <- ShopDeailhUsecase.handle(input)
       } yield
-         Ok(ShopDetailResponse.make(output).asJson)
+         Ok(ShopDetailResponse.make(output._1, output._2).asJson)
   }
 }

@@ -1,7 +1,7 @@
 package domains.usecases
 
 import domains.repositories.ShopSearchRepository
-import entities.{Shop, ShopId}
+import entities.{ImageFile, Shop, ShopId}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -12,11 +12,12 @@ class ShopSearchUsecaseInteractor @Inject() (
 )(implicit
     ex: ExecutionContext
 ) extends ShopSearchUsecaseInputPort {
-  override def handle(input: ShopSearchInputData): Future[Seq[Shop]] = {
+  override def handle(input: ShopSearchInputData): Future[(Seq[(Shop)], Seq[(Int, String)] )]= {
     for{
       //ユースケースに定義しているinputケースクラスを使っていいのか、あとで老人確認する
       shops <- shopSearchRepository.fetch(input)
-    } yield shops
+      images <- shopSearchRepository.fetchImage(shops.map(_.id))
+    } yield (shops, images)
 
   }
 }
