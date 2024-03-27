@@ -61,7 +61,8 @@ COPY . /santya-backend
 EXPOSE 9000
 WORKDIR /santya-backend
 ENV SBT_OPTS -Xmx3G -Xss4M -XX:+CMSClassUnloadingEnabled -Dsbt.ivy=true -Dsbt.ivy.home=/root/.ivy2
-RUN sbt "clean; compile; dist"
+RUN sbt "clean; compile; dist" \
+ && chmod 777 /public/
 
 #======================================================================================================================
 # runtime
@@ -90,8 +91,7 @@ USER appserver
 RUN unzip /tmp/santya-backend-1.0-SNAPSHOT.zip -d /home/appserver/ \
  && cp -i /tmp/run.sh /home/appserver/ \
  && chmod 755 /home/appserver/run.sh \
- && chmod 755 /home/appserver/santya-backend-1.0-SNAPSHOT/bin/santya-backend \
- && chmod 777 /public/
+ && chmod 755 /home/appserver/santya-backend-1.0-SNAPSHOT/bin/santya-backend
 
 WORKDIR /home/appserver
 
