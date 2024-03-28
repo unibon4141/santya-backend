@@ -101,10 +101,10 @@ class ShopManagementController @Inject()(
         val lastI = picture.filename.lastIndexOf(".")
         var extension = ""
         //imagesディレクトリ作成
-        val dirParent = Paths.get("./public/images/")
+        val dirParent = Paths.get("/public/images/")
         if(F.notExists(dirParent)) F.createDirectory(dirParent) // mkdir
         // 店舗用新規ディレクトリ作成
-        val dir = Paths.get("./public/images/"+shopId+"/")
+        val dir = Paths.get("/public/images/"+shopId+"/")
         if(F.notExists(dir)) F.createDirectory(dir) // mkdir
         if (lastI > 0) {
           extension = picture.filename.substring(lastI + 1)
@@ -113,7 +113,7 @@ class ShopManagementController @Inject()(
         val path = s"/assets/images/${shopId}/${filename}"
         val fileSize    = picture.fileSize
         val contentType = picture.contentType
-        picture.ref.copyTo(Paths.get(s"./santya-backend/public/images/${shopId}/${filename}"), replace = true)
+        picture.ref.copyTo(Paths.get(s"/public/images/${shopId}/${filename}"), replace = true)
         val input = ShopImageInputData(Seq(ImageFile(path)), ShopId(shopId))
         for {
           result <- shopImageUsecase.handle(input)
