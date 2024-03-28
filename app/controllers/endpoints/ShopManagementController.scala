@@ -101,10 +101,10 @@ class ShopManagementController @Inject()(
         val lastI = picture.filename.lastIndexOf(".")
         var extension = ""
         //imagesディレクトリ作成
-        val dirParent = Paths.get("./santya-backend/public/images/")
+        val dirParent = Paths.get("./public/images/")
         if(F.notExists(dirParent)) F.createDirectory(dirParent) // mkdir
         // 店舗用新規ディレクトリ作成
-        val dir = Paths.get("./santya-backend/public/images/"+shopId+"/")
+        val dir = Paths.get("./public/images/"+shopId+"/")
         if(F.notExists(dir)) F.createDirectory(dir) // mkdir
         if (lastI > 0) {
           extension = picture.filename.substring(lastI + 1)
