@@ -70,18 +70,19 @@ class MySQLShopSearchRepository @Inject() (
     }
   }
 
-  def fetchImage(shopIds: Seq[ShopId]): Future[Seq[(Int, String)]] = {
+  def fetchImage(shopIds: Seq[ShopId]): Future[Seq[(Int,Option[Array[Byte]])]] = {
     val ids = shopIds.map(_.value)
     val action = T.Shopimage.filter(image => image.shopId inSet ids).result
-    db.run(action).map {aa =>
-     aa.map(toEntity)
+    db.run(action).map {result =>
+    result.map(toEntityFromBinary)
 
     }
 
   }
 
-  private def toEntity(input: T.Shopimage#TableElementType): (Int, String) = {
-    (input.shopId, input.imagePath)
+
+  private def toEntityFromBinary(input: T.Shopimage#TableElementType): (Int, Option[Array[Byte]]) = {
+    (input.shopId, input.imageBainary)
   }
 
 }

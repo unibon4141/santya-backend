@@ -17,7 +17,7 @@ class MySQLShopImageRepository @Inject() (
     with HasDatabaseConfigProvider[JdbcProfile] {
   //  shopIdで店舗の詳細情報を取ってくるメソッド
   def fetch(paths: Seq[ImageFile], shopId: ShopId ): Future[Int] = {
-    val states = paths.map (p => (p.path, shopId.value))
+    val states = paths.map (p => (Option(p.path), shopId.value))
     val action = {
       T.Shopimage.map(si=> (si.imagePath, si.shopId) ) ++= states
     }
@@ -25,5 +25,12 @@ class MySQLShopImageRepository @Inject() (
       case Some(num) => num
       case _ => 0
     }
+  }
+
+  def saveImage(shopId: ShopId, image: Array[Byte]) = {
+    val action = {
+      T.Shopimage.map{s => (s.shopId, s.imageBainary)} += (shopId.value, Option(image))
+    }
+    db.run(action)
   }
 }

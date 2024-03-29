@@ -12,4 +12,8 @@ class ShopImageUsecaseInteracter @Inject()(
   def handle(input: ShopImageInputData): Future[Int] = {
     shopImageRepository.fetch(input.paths, input.shopId)
   }
+
+  def handleBinary(input: ShopImageBinaryInputData): Future[Int] = {
+    shopImageRepository.saveImage( input.shopId, input.content)
+  }
 }

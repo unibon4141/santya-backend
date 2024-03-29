@@ -32,5 +32,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
     libraryDependencies += "com.google.cloud.sql" % "mysql-socket-factory-connector-j-8" % "1.7.0",
 
 //    GCS
-    libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "2.35.0"
+    libraryDependencies += "com.google.cloud" % "google-cloud-storage" % "2.35.0",
+    libraryDependencies += "commons-io" % "commons-io" % "2.15.1"
+
   )
